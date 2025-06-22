@@ -18,7 +18,7 @@ import base64
 #from templates import analytics, dashboard, login, students, student_detail, reports, settings
 
 # Initialize Firebase
-cred = credentials.Certificate("E:\\Smart-Attendence-System\\iot-smart-attendance-cfd49-firebase-adminsdk-fbsvc-63f16e561b.json")
+cred = credentials.Certificate("iot-smart-attendance-cfd49-firebase-adminsdk-fbsvc-63f16e561b.json")
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://iot-smart-attendance-cfd49-default-rtdb.firebaseio.com'
 })
@@ -915,4 +915,4 @@ def generate_student_report_pdf(stats):
         return jsonify({"error": "Failed to generate PDF"}), 500
  
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)    
+    app.run(host='0.0.0.0', port=5001, debug=True)    
