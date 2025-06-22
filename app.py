@@ -29,8 +29,8 @@ app.secret_key = 'supersecret_enhanced_attendance_2024'
 # Configuration
 USERNAME = "admin"
 PASSWORD = "1234"
-status_file = "E:\\Smart-Attendence-System\\status.txt"
-data_file = "E:\\Smart-Attendence-System\\MAIN Programs\\PC\\attendance_data\\attendance.csv"
+status_file = "status.txt"
+data_file = "attendance_data/attendance.csv"
 
 # Helper Functions
 def generate_chart(chart_type='attendance_trend'):
@@ -385,7 +385,6 @@ def toggle(state):
         print(f"Failed to update status in Firebase: {e}")
     
     return redirect(url_for('dashboard'))
-    return redirect(url_for('dashboard'))
 
 @app.route('/status')
 def status():
@@ -448,7 +447,7 @@ def download_pdf():
         
         # Save CSV
         os.makedirs("attendance_data", exist_ok=True)
-        df.to_csv("E:\\Smart-Attendence-System\\MAIN Programs\\PC\\attendance_data\\attendance.csv", index=False)
+        df.to_csv("attendance_data/attendance.csv", index=False)
         
         # Generate PDF
         pdf = FPDF()
@@ -492,7 +491,7 @@ def download_pdf():
                 pdf.cell(col_width, 8, str(item)[:10], border=1, align='C')
             pdf.ln()
         
-        output_path = "E:\\Smart-Attendence-System\\MAIN Programs\\PC\\attendance_data\\attendance_report.pdf"
+        output_path = "attendance_data/attendance_report.pdf"
         pdf.output(output_path)
         
         return send_file(output_path, as_attachment=True, download_name=f"attendance_report_{datetime.now().strftime('%Y%m%d')}.pdf")
@@ -817,7 +816,7 @@ def generate_monthly_report_pdf(stats):
             pdf.ln()
         
         # Output to memory
-        output_path = f"E:\\Smart-Attendence-System\\MAIN Programs\\PC\\attendance_data\\monthly_report_{stats['month_name']}_{stats['year']}.pdf"
+        output_path = f"attendance_data/monthly_report_{stats['month_name']}_{stats['year']}.pdf"
         pdf.output(output_path)
         
         return send_file(
@@ -901,7 +900,7 @@ def generate_student_report_pdf(stats):
             pdf.ln()
         
         # Output to memory
-        output_path = f"E:\\Smart-Attendence-System\\MAIN Programs\\PC\\attendance_data\\student_report_{stats['name']}.pdf"
+        output_path = f"attendance_data/student_report_{stats['name']}.pdf"
         pdf.output(output_path)
         
         return send_file(
