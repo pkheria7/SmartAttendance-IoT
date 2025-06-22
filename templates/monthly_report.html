@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Report - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            color: #e0e0e0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .report-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .month-picker {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .month-picker select {
+            padding: 0.7rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
+        .month-picker select:focus {
+            outline: none;
+            border-color: #61afef;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            background: rgba(97, 175, 239, 0.15);
+            color: #61afef;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: rgba(97, 175, 239, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .btn-download {
+            background: rgba(152, 195, 121, 0.15);
+            color: #98c379;
+        }
+        
+        .btn-download:hover {
+            background: rgba(152, 195, 121, 0.25);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .attendance-table th {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .attendance-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .attendance-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .rate-excellent {
+            color: #98c379;
+        }
+        
+        .rate-good {
+            color: #61afef;
+        }
+        
+        .rate-average {
+            color: #e5c07b;
+        }
+        
+        .rate-poor {
+            color: #e06c75;
+        }
+        
+        .calendar-view {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .calendar-day {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .calendar-date {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calendar-rate {
+            font-size: 0.9rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            color: #61afef;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('reports') }}" class="btn-back">← Back to Reports</a>
+        
+        <h2>Monthly Attendance Report</h2>
+        <div class="subtitle">{{ stats.month_name }} {{ stats.year }}</div>
+        
+        <div class="report-actions">
+            <form class="month-picker" id="monthForm">
+                <select name="month" id="monthSelect">
+                    <option value="1" {% if selected_month == 1 %}selected{% endif %}>January</option>
+                    <option value="2" {% if selected_month == 2 %}selected{% endif %}>February</option>
+                    <option value="3" {% if selected_month == 3 %}selected{% endif %}>March</option>
+                    <option value="4" {% if selected_month == 4 %}selected{% endif %}>April</option>
+                    <option value="5" {% if selected_month == 5 %}selected{% endif %}>May</option>
+                    <option value="6" {% if selected_month == 6 %}selected{% endif %}>June</option>
+                    <option value="7" {% if selected_month == 7 %}selected{% endif %}>July</option>
+                    <option value="8" {% if selected_month == 8 %}selected{% endif %}>August</option>
+                    <option value="9" {% if selected_month == 9 %}selected{% endif %}>September</option>
+                    <option value="10" {% if selected_month == 10 %}selected{% endif %}>October</option>
+                    <option value="11" {% if selected_month == 11 %}selected{% endif %}>November</option>
+                    <option value="12" {% if selected_month == 12 %}selected{% endif %}>December</option>
+                </select>
+                
+                <select name="year" id="yearSelect">
+                    {% for year in range(2023, 2026) %}
+                        <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit" class="btn">Update</button>
+            </form>
+            
+            <a href="{{ url_for('monthly_report', month=selected_month, year=selected_year, export='pdf') }}" class="btn btn-download">Download PDF Report</a>
+        </div>
+        
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-value">{{ stats.student_count }}</div>
+                <div class="card-label">Total Students</div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="card-value">{{ stats.total_days }}</div>
+                <div class="card-label">School Days</div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="card-value">{{ "%.2f"|format(stats.overall_rate) }}%</div>
+                <div class="card-label">Overall Attendance Rate</div>
+            </div>
+        </div>
+        
+        {% if stats.dates %}
+            <div class="section-title">Daily Attendance Rates</div>
+            <div class="calendar-view">
+                <div class="calendar-grid">
+                    {% for date in stats.dates|sort %}
+                        {% set present_count = namespace(value=0) %}
+                        {% for name, data in stats.student_data.items() %}
+                            {% if date in data.dates and data.dates[date] == "P" %}
+                                {% set present_count.value = present_count.value + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% set rate = (present_count.value / stats.student_count * 100) if stats.student_count > 0 else 0 %}
+                        
+                        <div class="calendar-day">
+                            {% set date_obj = date.split('-') %}
+                            <div class="calendar-date">{{ date_obj[2]|default(date[-2:]) }}</div>
+                            <div class="calendar-rate">{{ "%.1f"|format(rate) }}%</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="section-title">Student Records</div>
+        <table class="attendance-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name, data in stats.student_data.items()|sort(attribute='1.present', reverse=true) %}
+                    {% set total = data.present + data.absent %}
+                    {% set rate = (data.present / total * 100) if total > 0 else 0 %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ data.present }}</td>
+                        <td>{{ data.absent }}</td>
+                        <td>{{ "%.2f"|format(rate) }}%</td>
+                        <td>
+                            {% if rate >= 90 %}
+                                <span class="rate-excellent">Excellent</span>
+                            {% elif rate >= 75 %}
+                                <span class="rate-good">Good</span>
+                            {% elif rate >= 60 %}
+                                <span class="rate-average">Average</span>
+                            {% else %}
+                                <span class="rate-poor">Poor</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        // The form submit is handled normally to reload the page with new month/year params
+    </script>
+</body>
+</html>

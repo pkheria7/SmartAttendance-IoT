@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Settings - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .settings-panel {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .status-toggle {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-on {
+            background: rgba(152, 195, 121, 0.15);
+            color: #98c379;
+        }
+
+        .btn-on:hover {
+            background: rgba(152, 195, 121, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-off {
+            background: rgba(224, 108, 117, 0.15);
+            color: #e06c75;
+        }
+
+        .btn-off:hover {
+            background: rgba(224, 108, 117, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .nav-links a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>System Settings</h2>
+        
+        <div class="settings-panel">
+            <div class="settings-item">
+                <div class="settings-title">Attendance System Status</div>
+                <div>Current Status: <strong>{{ status.upper() }}</strong></div>
+                <div class="status-toggle" style="margin-top: 1rem;">
+                    <a href="/toggle/on" class="btn btn-on">Turn ON</a>
+                    <a href="/toggle/off" class="btn btn-off">Turn OFF</a>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-title">System Information</div>
+                <div>Smart Attendance System v1.0</div>
+            </div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" style="color: #e0e0e0;">Dashboard</a>
+            <a href="{{ url_for('students') }}" style="color: #e0e0e0;">Students</a>
+            <a href="{{ url_for('reports') }}" style="color: #e0e0e0;">Reports</a>
+            <a href="{{ url_for('analytics') }}" style="color: #61afef;">Analytics</a>
+            <a href="{{ url_for('settings') }}" style="color: #98c379;">Settings</a>
+            <a href="{{ url_for('logout') }}" style="color: #e06c75;">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

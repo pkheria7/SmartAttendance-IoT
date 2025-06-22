@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            color: #e0e0e0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+        
+        .student-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .attendance-rate .summary-value {
+            color: #98c379;
+        }
+        
+        .present-days .summary-value {
+            color: #61afef;
+        }
+        
+        .absent-days .summary-value {
+            color: #e06c75;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            color: #61afef;
+        }
+        
+        .attendance-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .attendance-day {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .present {
+            background: rgba(152, 195, 121, 0.2);
+            color: #98c379;
+            border: 1px solid rgba(152, 195, 121, 0.5);
+        }
+        
+        .absent {
+            background: rgba(224, 108, 117, 0.2);
+            color: #e06c75;
+            border: 1px solid rgba(224, 108, 117, 0.5);
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-links {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .nav-links a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('students') }}" class="btn-back">← Back to Students</a>
+        
+        <h2>{{ name }}</h2>
+        <div class="subtitle">Student Attendance Details</div>
+        
+        <div class="student-panel">
+            <div class="attendance-summary">
+                <div class="summary-card attendance-rate">
+                    <div class="summary-value">{{ student_data.attendance_rate }}%</div>
+                    <div class="summary-label">Attendance Rate</div>
+                </div>
+                <div class="summary-card present-days">
+                    <div class="summary-value">{{ student_data.present_days }}</div>
+                    <div class="summary-label">Present Days</div>
+                </div>
+                <div class="summary-card absent-days">
+                    <div class="summary-value">{{ student_data.absent_days }}</div>
+                    <div class="summary-label">Absent Days</div>
+                </div>
+            </div>
+            
+            <div class="section-title">Recent Attendance</div>
+            <div class="attendance-history">
+                {% for record in student_data.recent_attendance %}
+                    <div class="attendance-day {{ 'present' if record.status == 'P' else 'absent' }}" 
+                         title="{{ record.date }}: {{ 'Present' if record.status == 'P' else 'Absent' }}">
+                        {{ 'P' if record.status == 'P' else 'A' }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" style="color: #e0e0e0;">Dashboard</a>
+            <a href="{{ url_for('students') }}" style="color: #98c379;">Students</a>
+            <a href="{{ url_for('reports') }}" style="color: #e0e0e0;">Reports</a>
+            <a href="{{ url_for('analytics') }}" style="color: #61afef;">Analytics</a>
+            <a href="{{ url_for('settings') }}" style="color: #e0e0e0;">Settings</a>
+            <a href="{{ url_for('logout') }}" style="color: #e06c75;">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

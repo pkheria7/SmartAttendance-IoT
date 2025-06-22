@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            color: #e0e0e0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .student-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(152, 195, 121, 0.3);
+        }
+        
+        .student-name {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #61afef;
+        }
+        
+        .student-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .student-stat {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .attendance-bar {
+            height: 8px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0 1rem 0;
+        }
+        
+        .attendance-fill {
+            height: 100%;
+            background: linear-gradient(to right, #98c379, #61afef);
+        }
+        
+        .btn-view {
+            padding: 0.7rem 1.2rem;
+            background: rgba(97, 175, 239, 0.15);
+            color: #61afef;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            margin-top: auto;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-view:hover {
+            background: rgba(97, 175, 239, 0.25);
+        }
+        
+        .search-form {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #61afef;
+        }
+        
+        .nav-links {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .nav-links a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Management</h2>
+        
+        <div class="search-form">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search students...">
+        </div>
+        
+        <div class="students-grid" id="studentsGrid">
+            {% if stats and stats.student_stats and stats.student_stats|length > 0 %}
+                {% for name, data in stats.student_stats.items() %}
+                <div class="student-card student-{{ loop.index }}">
+                    <div class="student-name">{{ name }}</div>
+                    <div class="student-stats">
+                        <div class="student-stat">
+                            <span>Attendance Rate:</span>
+                            <span>{{ data.attendance_rate if data.attendance_rate is defined else '0' }}%</span>
+                        </div>
+                        <div class="student-stat">
+                            <span>Present Days:</span>
+                            <span>{{ data.present_days if data.present_days is defined else '0' }}</span>
+                        </div>
+                        <div class="student-stat">
+                            <span>Absent Days:</span>
+                            <span>{{ data.absent_days if data.absent_days is defined else '0' }}</span>
+                        </div>
+                    </div>
+                    <div class="attendance-bar">
+                        <div class="attendance-fill" data-rate="{{ data.attendance_rate if data.attendance_rate is defined else '0' }}"></div>
+                    </div>
+                    <a href="{{ url_for('student_detail', name=name) }}" class="btn-view">View Details</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                    <p>No student data available. Attendance records will appear here once students start checking in.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" style="color: #e0e0e0;">Dashboard</a>
+            <a href="{{ url_for('students') }}" style="color: #98c379;">Students</a>
+            <a href="{{ url_for('reports') }}" style="color: #e0e0e0;">Reports</a>
+            <a href="{{ url_for('analytics') }}" style="color: #61afef;">Analytics</a>
+            <a href="{{ url_for('settings') }}" style="color: #e0e0e0;">Settings</a>
+            <a href="{{ url_for('logout') }}" style="color: #e06c75;">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        // Set attendance bar widths
+        document.querySelectorAll('.attendance-fill').forEach(fill => {
+            const rate = fill.getAttribute('data-rate');
+            fill.style.width = rate + '%';
+        });
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.student-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('.student-name').textContent.toLowerCase();
+                if (name.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            color: #e0e0e0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .analytics-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-selector {
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-selector label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .chart-selector select {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
+        .chart-selector select:focus {
+            outline: none;
+            border-color: #61afef;
+        }
+        
+        .chart-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .chart-container img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stats-summary {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stats-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #61afef;
+        }
+        
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .nav-links {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .nav-links a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Analytics Dashboard</h2>
+        
+        <div class="analytics-panel">
+            <div class="chart-selector">
+                <label for="chart-type"><b>Select Analysis Type:</b></label>
+                <select class="form-control" id="chart-type" onchange="updateChart()">
+                    <option value="attendance_trend" {% if selected_chart == 'attendance_trend' %}selected{% endif %}>Attendance Trend Over Time</option>
+                    <option value="daily_counts" {% if selected_chart == 'daily_counts' %}selected{% endif %}>Daily Student Counts</option>
+                    <option value="student_comparison" {% if selected_chart == 'student_comparison' %}selected{% endif %}>Student Attendance Comparison</option>
+                    <option value="weekday_analysis" {% if selected_chart == 'weekday_analysis' %}selected{% endif %}>Weekday Analysis</option>
+                </select>
+            </div>
+            
+            <div class="chart-container">
+                {% if chart_data %}
+                    <img src="data:image/png;base64,{{ chart_data }}" class="img-fluid" alt="Attendance Chart">
+                {% else %}
+                    <div style="padding: 3rem; text-align: center; background: rgba(0,0,0,0.1); border-radius: 10px;">
+                        No data available to generate the selected chart.
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="stats-summary">
+                <div class="stats-card">
+                    <div class="stats-value">{{ stats.total_students }}</div>
+                    <div class="stats-label">Total Students</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-value">{{ stats.total_days }}</div>
+                    <div class="stats-label">Total Days</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-value">{{ stats.overall_attendance_rate }}%</div>
+                    <div class="stats-label">Overall Attendance Rate</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" style="color: #e0e0e0;">Dashboard</a>
+            <a href="{{ url_for('students') }}" style="color: #e0e0e0;">Students</a>
+            <a href="{{ url_for('reports') }}" style="color: #e0e0e0;">Reports</a>
+            <a href="{{ url_for('analytics') }}" style="color: #98c379;">Analytics</a>
+            <a href="{{ url_for('settings') }}" style="color: #e0e0e0;">Settings</a>
+            <a href="{{ url_for('logout') }}" style="color: #e06c75;">Logout</a>
+        </div>
+    </div>
+    
+    <script>
+        function updateChart() {
+            const chartType = document.getElementById('chart-type').value;
+            window.location.href = '/analytics?chart_type=' + chartType;
+        }
+    </script>
+</body>
+</html>

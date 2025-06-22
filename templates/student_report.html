@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Report - Smart Attendance System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            color: #e0e0e0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #282c34;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+        
+        .report-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .date-picker {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .date-picker input {
+            padding: 0.7rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
+        .date-picker input:focus {
+            outline: none;
+            border-color: #61afef;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            background: rgba(97, 175, 239, 0.15);
+            color: #61afef;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: rgba(97, 175, 239, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .btn-download {
+            background: rgba(152, 195, 121, 0.15);
+            color: #98c379;
+        }
+        
+        .btn-download:hover {
+            background: rgba(152, 195, 121, 0.25);
+        }
+        
+        .student-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .attendance-rate .summary-value {
+            color: #98c379;
+        }
+        
+        .present-days .summary-value {
+            color: #61afef;
+        }
+        
+        .absent-days .summary-value {
+            color: #e06c75;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            color: #61afef;
+        }
+        
+        .day-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .day-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .day-name {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .day-rate {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .attendance-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .attendance-record {
+            width: 100%;
+            display: flex;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            justify-content: space-between;
+        }
+        
+        .record-date {
+            font-weight: 500;
+        }
+        
+        .record-day {
+            opacity: 0.7;
+        }
+        
+        .record-status {
+            font-weight: 700;
+        }
+        
+        .record-status.present {
+            color: #98c379;
+        }
+        
+        .record-status.absent {
+            color: #e06c75;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('students') }}" class="btn-back">← Back to Students</a>
+        
+        <h2>{{ stats.name }}</h2>
+        <div class="subtitle">Attendance Report</div>
+        
+        <div class="report-actions">
+            <form class="date-picker" id="dateForm">
+                <label>From:</label>
+                <input type="date" name="start_date" id="startDate" value="{{ stats.start_date }}">
+                
+                <label>To:</label>
+                <input type="date" name="end_date" id="endDate" value="{{ stats.end_date }}">
+                
+                <button type="submit" class="btn">Update</button>
+            </form>
+            
+            <a href="{{ url_for('student_report', name=stats.name, start_date=stats.start_date, end_date=stats.end_date, export='pdf') }}" class="btn btn-download">Download PDF Report</a>
+        </div>
+        
+        <div class="student-panel">
+            <div class="attendance-summary">
+                <div class="summary-card attendance-rate">
+                    <div class="summary-value">{{ "%.2f"|format(stats.attendance_rate) }}%</div>
+                    <div class="summary-label">Attendance Rate</div>
+                </div>
+                <div class="summary-card present-days">
+                    <div class="summary-value">{{ stats.present_days }}</div>
+                    <div class="summary-label">Present Days</div>
+                </div>
+                <div class="summary-card absent-days">
+                    <div class="summary-value">{{ stats.absent_days }}</div>
+                    <div class="summary-label">Absent Days</div>
+                </div>
+            </div>
+            
+            <div class="section-title">Day of Week Analysis</div>
+            <div class="day-analysis">
+                {% for day, data in stats.day_stats.items() %}
+                    <div class="day-card">
+                        <div class="day-name">{{ day[:3] }}</div>
+                        <div class="day-rate">{{ "%.1f"|format(data.rate) }}%</div>
+                        <div class="day-count">{{ data.present }}/{{ data.total }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="section-title">Attendance Records</div>
+            <div class="attendance-history">
+                {% for record in stats.attendance_data %}
+                    <div class="attendance-record">
+                        <div>
+                            <span class="record-date">{{ record.date }}</span>
+                            <span class="record-day">({{ record.day_of_week }})</span>
+                        </div>
+                        <div class="record-status {{ 'present' if record.status == 'P' else 'absent' }}">
+                            {{ 'Present' if record.status == 'P' else 'Absent' }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
